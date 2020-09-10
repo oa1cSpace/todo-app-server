@@ -11,8 +11,8 @@ const User = sequelize.define('users', {
   surname: Sequelize.CHAR,
   email: Sequelize.CHAR,
   password: Sequelize.CHAR,
-  createdAt: Sequelize.DATE,
-  updatedAt: Sequelize.DATE,
+  // createdAt: Sequelize.DATE,
+  // updatedAt: Sequelize.DATE,
 });
 
 module.exports = User;
