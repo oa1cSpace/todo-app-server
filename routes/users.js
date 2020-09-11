@@ -6,8 +6,8 @@ module.exports = (app, express) => {
 
     router.post('/users', (req, res, ...args) => UserController.createUser(req, res));
 
-    router.get('/users/:userId', (req, res, ...args) => UserController.getUser(req, res));
-    router.get('/users', (req, res, ...args) => UserController.getAll(req, res));
+    router.get('/users/:userId', (req, res, ...args) => UserController.getUserById(req, res));
+    router.get('/users', (req, res, ...args) => UserController.getAllUsers(req, res));
 
     app.use('/', router);
 };

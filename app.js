@@ -26,6 +26,7 @@ app.use((req, res, next) => {
     next();
 });
 
+require('./routes/tasks')(app, express);
 // app.use('/users', usersRouter);
 require('./routes/users')(app, express);
 app.use('/', indexRouter);

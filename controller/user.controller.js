@@ -2,9 +2,8 @@ const UsersService = require('../services/users.service');
 
 class UserController {
 
-    // method of controller
-    static async getAll(req, res) {
-        console.log('GET ALL   ....');
+    // method of controller which gets all users form table
+    static async getAllUsers(req, res) {
 
         const users = await UsersService.getUsers();
 
@@ -14,8 +13,7 @@ class UserController {
     }
 
     //
-    static async getUser(req, res) {
-        console.log('GET ALL   ....');
+    static async getUserById(req, res) {
 
         const { userId } = req.params;
 
@@ -28,7 +26,6 @@ class UserController {
 
     //
     static async createUser(req, res) {
-        console.log('GET ALL   ....');
 
         const { name, surname, email, password } = req.body;
 
