@@ -1,35 +1,59 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
+const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 const app = express();
+app.use(cors());
+app.options('*', cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
-app.use(express.json());
+// app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
     res.append('Access-Control-Allow-Origin', ['*']);
-    res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.append('Access-Control-Allow-Headers', 'Content-Type');
     next();
+});*/
+
+
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
+    console.log('req ', req.method);
+
+    //intercepts OPTIONS method
+    if ('OPTIONS' === req.method) {
+
+        //respond with 200
+        res.send(200);
+    }
+    else {
+        //move on
+        next();
+    }
 });
 
+
 require('./routes/tasks')(app, express);
-// app.use('/users', usersRouter);
 require('./routes/users')(app, express);
-app.use('/', indexRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -47,15 +71,6 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-
-
 app.listen(3000, () => console.log('Gator app listening on port 3000!'));
 
-
-
 module.exports = app;
-
-
-
-
-

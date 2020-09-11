@@ -11,11 +11,12 @@ class TasksService {
                 return Task.findAll();
             });
     }
+
     //GET
     static getTaskById(id) {
         return sequelize.sync({force: false})
             .then(() => {
-                return Task.findOne({ where: {id}});
+                return Task.findOne({where: {id}});
             })
     }
 
@@ -26,6 +27,14 @@ class TasksService {
                 return Task.create(data);
             }).catch((error) => {
                 console.log('YOU GOT ERROR !!!', error);
+            })
+    }
+
+    // DELETE
+    static deleteTask(id) {
+        return sequelize.sync({force: false})
+            .then(() => {
+                return Task.delete({where: {id}});
             })
     }
 

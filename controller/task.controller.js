@@ -32,6 +32,18 @@ class TaskController {
         console.log('data: ', task)
         res.send(task);
     }
+
+    //
+    static async deleteTask(req, res) {
+
+        const { taskId } = req.params;
+
+        console.log(req.params);  // ==> :id
+        const  task  = await TasksService.deleteTask(taskId);
+        console.log('DELETE... : ', task)
+        /*res.send(user);*/
+        res.send(task);
+    }
 }
 
 module.exports = TaskController;
