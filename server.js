@@ -5,6 +5,9 @@ const db = require('./models');
 // const taskRoutes = require('./routes/tasks')
 
 const bodyParser = require('body-parser');
+const  dotenv = require('dotenv');
+
+dotenv.config();
 
 app.use(bodyParser.urlencoded({
     extended: false

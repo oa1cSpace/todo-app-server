@@ -4,25 +4,18 @@ const Task = db.Task;
 class TaskController {
 
     static async getAllTasks(req, res) {
-        console.warn('======[ @@ {getAllTasks}]======>');
+        console.warn('======[ @@ {getAllTasks}]======>', req.userId);
         try {
             const tasks = await Task.findAll(
                 {
-                    attributes: [
-                        'id',
-                        'userId',
-                        'title',
-                        'description',
-                        'editing',
-                        'completed',
-                        'createdAt',
-                        'updatedAt',
-                    ]
+                     where: {
+                         userId: req.userId
+                     }
                 });
             console.log('======[ @@ tasks ]======> ', JSON.stringify(tasks));
             res.send(tasks);
         } catch (err) {
-            console.log('[something went wrong with getting all tasks....] YOU GOT AN ERROR !!!', error);
+            console.log('[ something went wrong with getting all tasks....] YOU GOT AN ERROR !!!', error);
         }
     }
 
@@ -31,7 +24,7 @@ class TaskController {
         const {taskId} = req.params;
         console.log(req.params);  // ==> :taskId
         const task = await Task.findOne({where: {taskId}}).catch((error) => {
-            console.log('[something went wrong with getting task by id....] YOU GOT AN ERROR !!!', error);
+            console.log('[ something went wrong with getting task by id....] YOU GOT AN ERROR !!!', error);
         });
         console.log('data: ', task)
         res.send(task);
@@ -40,19 +33,20 @@ class TaskController {
     //
     static async createTask(req, res) {
         const {title} = req.body;
+        const {userId} = req;
         console.log(req.body);  // ==> :id
         try {
-            const task = await Task.create({title});
+            const task = await Task.create({title, userId});
             res.send(task);
         } catch (error) {
-            console.log('[something went wrong with creating task....] YOU GOT AN ERROR !!!', error);
+            console.log('[ something went wrong with creating task.... ] YOU GOT AN ERROR !!!', error);
         }
     }
 
     //
     static async deleteTask(req, res) {
         const {taskId} = req.params;
-        console.error('id ====== deleteTask =====> ', taskId);
+        console.error('=====[ Task\'s ID to delete ]========> ', taskId);
         console.log(req.params);  // ==> :id
         try {
             const response = await Task.destroy({where: {id: taskId}});
@@ -96,9 +90,9 @@ class TaskController {
         const {title} = req.body;
         const {taskId} = req.params;
         try {
-            console.log('EDITING ============> ', Task.editing );
+            console.log('===[EDITING ]============> ', Task.editing );
             const response = await Task.upsert({title, id: taskId, editing: true});
-            console.log('EDITING (response) 2 ============> ', response );
+            console.log('===[EDITING (response) 2 ]============> ', response );
 
             if (!response) {
                 return res.send({
